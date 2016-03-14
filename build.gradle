@@ -8,7 +8,7 @@ buildscript {
 }
 
 apply plugin: 'org.javafxports.jfxmobile'
-//apply from  : 'http://dl.bintray.com/content/shemnon/javafx-gradle/8.1.1/javafx.plugin' // needed when building native app with gradle build
+apply from  : 'http://dl.bintray.com/content/shemnon/javafx-gradle/8.1.1/javafx.plugin' // needed when building native app with gradle build
 
 repositories {
     jcenter()
@@ -22,7 +22,7 @@ mainClassName = 'eu.hansolo.mood.MoodFX'
 dependencies {
     compile fileTree(dir: 'lib', include: ['*.jar'])
     compile 'com.gluonhq:charm:2.0.0'
-    //compile 'com.gluonhq:charm-desktop:2.0.0' // needed for gradle installApp on ARM devices like Raspberry Pi
+    //compile 'com.gluonhq:charm-desktop:2.0.0' // needed for gradle build on Desktop and gradle installApp on ARM devices
 
     androidRuntime 'com.gluonhq:charm-android:2.0.0'
     iosRuntime 'com.gluonhq:charm-ios:2.0.0'

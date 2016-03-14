@@ -19,6 +19,7 @@ package eu.hansolo.mood;
 import com.gluonhq.charm.down.common.JavaFXPlatform;
 import com.gluonhq.charm.down.common.PlatformFactory;
 import com.gluonhq.charm.glisten.control.AppBar;
+import com.gluonhq.charm.glisten.layout.responsive.grid.Offset;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
 import eu.hansolo.mood.controls.Switch;
@@ -27,14 +28,18 @@ import eu.hansolo.mood.mqtt.MqttEvent.MqttEventType;
 import eu.hansolo.mood.mqtt.MqttManager;
 import eu.hansolo.mood.mqtt.Topic;
 import eu.hansolo.mood.transitions.SlideInRightTransition;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -66,6 +71,7 @@ import static com.gluonhq.charm.glisten.visual.GlistenStyleClasses.applyStyleCla
 public class ConfigView extends View {
     private static final String PROPERTIES_FILE_NAME = "settings.properties";
     private static final Random RND                  = new Random();
+    private static       double currentOffset;
     private File                localStoragePath;
     private Properties          properties;
     private Switch              connectButton;
@@ -108,6 +114,14 @@ public class ConfigView extends View {
 
     // ******************** Initialization ************************************
     private void init() {
+        Label connectionLabel = new Label("CONNECTION");
+        connectButton = new Switch();
+        connectButton.setRounded(true);
+        connectButton.setSelectedText("CONNECTED");
+        connectButton.setText("DISCONNECTED");
+        connectButton.setSelectedTextColor(Color.rgb(51, 51, 51));
+        applyStyleClass(connectButton, TOGGLE_BUTTON_SWITCH);
+
         Label brokerAddressLabel = new Label("BROKER ADDRESS");
         brokerAddressField = new TextField();
         brokerAddressField.focusedProperty().addListener((ov, wasFocused, isFocused) -> { if (wasFocused && !isFocused) { saveConfig(); } });
@@ -126,11 +140,13 @@ public class ConfigView extends View {
 
         Label userNameLabel = new Label("USER NAME");
         userNameField = new TextField("");
-        userNameField.focusedProperty().addListener((ov, wasFocused, isFocused) -> { if (wasFocused && !isFocused) { saveConfig(); } });
+        userNameField.focusedProperty().addListener((ov, wasFocused, isFocused) -> moveToFoV(userNameLabel, wasFocused, isFocused));
+        userNameField.setOnKeyPressed(e -> { if (e.getCode().equals(KeyCode.ENTER)) { resetFoV(); } });
 
         Label passwordLabel = new Label("PASSWORD");
         passwordField = new PasswordField();
-        passwordField.focusedProperty().addListener((ov, wasFocused, isFocused) -> { if (wasFocused && !isFocused) { saveConfig(); } });
+        passwordField.focusedProperty().addListener((ov, wasFocused, isFocused) -> moveToFoV(userNameLabel, wasFocused, isFocused));
+        passwordField.setOnKeyPressed(e -> { if (e.getCode().equals(KeyCode.ENTER)) { resetFoV(); } });
 
         Separator separator2 = new Separator(Orientation.HORIZONTAL);
         separator2.setValignment(VPos.CENTER);
@@ -138,24 +154,18 @@ public class ConfigView extends View {
 
         Label lampIdLabel = new Label("LAMP ID");
         lampIdField = new TextField();
-        lampIdField.focusedProperty().addListener((ov, wasFocused, isFocused) -> { if (wasFocused && !isFocused) { saveConfig(); } });
+        lampIdField.focusedProperty().addListener((ov, wasFocused, isFocused) -> moveToFoV(lampIdLabel, wasFocused, isFocused));
+        lampIdField.setOnKeyPressed(e -> { if (e.getCode().equals(KeyCode.ENTER)) { resetFoV(); } });
 
         Label topicLabel = new Label("TOPIC");
         topicField = new TextField();
-        topicField.focusedProperty().addListener((ov, wasFocused, isFocused) -> { if (wasFocused && !isFocused) { saveConfig(); } });
+        topicField.focusedProperty().addListener((ov, wasFocused, isFocused) -> moveToFoV(lampIdLabel, wasFocused, isFocused));
+        topicField.setOnKeyPressed(e -> { if (e.getCode().equals(KeyCode.ENTER)) { resetFoV(); } });
         applyStyleClass(topicField, LIGHT);
 
         Separator separator0 = new Separator(Orientation.HORIZONTAL);
         separator0.setValignment(VPos.CENTER);
         separator0.setPrefHeight(40);
-
-        Label connectionLabel = new Label("CONNECTION");
-        connectButton = new Switch();
-        connectButton.setRounded(true);
-        connectButton.setSelectedText("CONNECTED");
-        connectButton.setText("DISCONNECTED");
-        connectButton.setSelectedTextColor(Color.rgb(51, 51, 51));
-        applyStyleClass(connectButton, TOGGLE_BUTTON_SWITCH);
 
         GridPane gridPane = new GridPane();
         gridPane.setHgap(5);
@@ -254,6 +264,16 @@ public class ConfigView extends View {
         }
         return uniqueId;
     }
+
+    private void moveToFoV(final Node NODE, final boolean WAS_FOCUSED, final boolean IS_FOCUSED) {
+        if (IS_FOCUSED && !WAS_FOCUSED) {         // Got Focus
+            if (!JavaFXPlatform.isDesktop()) configPane.setTranslateY(-NODE.getLayoutY());
+        } else if (WAS_FOCUSED && !IS_FOCUSED) {  // Lost Focus
+            resetFoV();
+            saveConfig();
+        }
+    }
+    private void resetFoV() { if (!JavaFXPlatform.isDesktop()) configPane.setTranslateY(0); }
 
 
     // ******************** Properties/Config *********************************
