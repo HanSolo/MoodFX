@@ -1,0 +1,71 @@
+/*
+ * Copyright (c) 2016 by Gerrit Grunwald
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.root{
+    -fx-background      : rgb(51, 51, 51);
+    -fx-text-fill       : -text-dark;
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.3);
+
+    -text-disabled      : -text-disabled-dark;
+    -background-disabled:rgba(255, 255, 255, 0.12);
+    -background-fill    : -text-dark;
+
+    -flat-button-hover-background  : rgba(204, 204, 204, 0.15);
+    -flat-button-pressed-background: rgba(204, 204, 204, 0.25);
+    -flat-button-disabled-fill     : rgba(255, 255, 255, 0.3);
+}
+
+.text-field {
+    -fx-text-fill: lightgrey;
+}
+
+.red-circle {
+    -fx-fill  : radial-gradient(center 50% 50%, radius 50%, rgb(255,115,115) 0%,rgb(255,0,0) 100%);
+    -fx-stroke: rgb(140,0,0);
+}
+.orange-circle {
+    -fx-fill  : radial-gradient(center 50% 50%, radius 50%, rgb(255,185,115) 0%,rgb(255,128,0) 100%);
+    -fx-stroke: rgb(140,70,0);
+}
+.yellow-circle {
+    -fx-fill  : radial-gradient(center 50% 50%, radius 50%, rgb(255,255,115) 0%,rgb(255,255,0) 100%);
+    -fx-stroke: rgb(140,140,0);
+}
+.yellow-green-circle {
+    -fx-fill  : radial-gradient(center 50% 50%, radius 50%, rgb(185,255,115) 0%,rgb(128,255,0) 100%);
+    -fx-stroke: rgb(70,140,0);
+}
+
+.green-circle {
+    -fx-fill  : radial-gradient(center 50% 50%, radius 50%, rgb(115,255,115) 0%,rgb(0,255,0) 100%);
+    -fx-stroke: rgb(0,140,0);
+}
+.cyan-circle {
+    -fx-fill  : radial-gradient(center 50% 50%, radius 50%, rgb(115,255,255) 0%,rgb(0,255,255) 100%);
+    -fx-stroke: rgb(0,140,140);
+}
+.blue-circle {
+    -fx-fill  : radial-gradient(center 50% 50%, radius 50%, rgb(115,115,255) 0%,rgb(0,0,255) 100%);
+    -fx-stroke: rgb(0,0,140);
+}
+.purple-circle {
+    -fx-fill  : radial-gradient(center 50% 50%, radius 50%, rgb(128,0,255) 0%,rgb(204,153,255) 100%);
+    -fx-stroke: rgb(70,0,140);
+}
+.magenta-circle {
+    -fx-fill  : radial-gradient(center 50% 50%, radius 50%, rgb(255,115,255) 0%,rgb(255,0,255) 100%);
+    -fx-stroke: rgb(140,0,140);
+}

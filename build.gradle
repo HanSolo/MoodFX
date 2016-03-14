@@ -1,0 +1,91 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.javafxports:jfxmobile-plugin:1.0.7'
+    }
+}
+
+apply plugin: 'org.javafxports.jfxmobile'
+//apply from  : 'http://dl.bintray.com/content/shemnon/javafx-gradle/8.1.1/javafx.plugin' // needed when building native app with gradle build
+
+repositories {
+    jcenter()
+    maven {
+        url 'http://nexus.gluonhq.com/nexus/content/repositories/releases'
+    }
+}
+
+mainClassName = 'eu.hansolo.mood.MoodFX'
+
+dependencies {
+    compile fileTree(dir: 'lib', include: ['*.jar'])
+    compile 'com.gluonhq:charm:2.0.0'
+    //compile 'com.gluonhq:charm-desktop:2.0.0' // needed for gradle installApp on ARM devices like Raspberry Pi
+
+    androidRuntime 'com.gluonhq:charm-android:2.0.0'
+    iosRuntime 'com.gluonhq:charm-ios:2.0.0'
+    desktopRuntime 'com.gluonhq:charm-desktop:2.0.0'
+    embeddedRuntime 'com.gluonhq:charm-desktop:2.0.0'
+}
+
+jfxmobile {
+    android {
+        manifest = 'src/android/AndroidManifest.xml'
+        applicationPackage = 'eu.hansolo.mood'
+    }
+    ios {
+        iosProvisioningProfile = 'iOSProvisionProfile_2016'
+        infoPList = file('src/ios/Default-Info.plist')
+        forceLinkClasses = [
+                'com.gluonhq.**.*',
+                'io.datafx.**.*',
+                'javax.annotations.**.*',
+                'javax.inject.**.*',
+                'javax.json.**.*',
+                'org.glassfish.json.**.*',
+                'eu.hansolo.**.*',
+                'org.eclipse.paho.client.mqttv3.**.*'
+        ]
+    }
+    embedded {
+        remotePlatforms {
+            raspberry {
+                host = 'pi3'
+                username = 'pi'
+                password = 'alliance'
+                workingDir = '/home/pi'
+                jreLocation = '/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt'
+                execPrefix = 'sudo'
+            }
+        }
+    }
+}
+
+/*
+// needed when building native desktop app with gradle build
+javafx {
+    appID     = 'MoodFX'
+    appName   = 'MoodFX'
+    mainClass = 'eu.hansolo.mood.MoodFX'
+
+    icons {
+        shortcut = [
+                'icons/icon-16.png', 'icons/icon-16@2x.png',
+                'icons/icon-32.png', 'icons/icon-32@2x.png',
+                'icons/icon-64.png',
+                'icons/icon-128.png', 'icons/icon-128@2x.png',
+                'icons/icon-256.png', 'icons/icon-256@2x.png',
+                'icons/icon-512.png', 'icons/icon-512@2x.png'
+        ]
+        volume = shortcut
+        setup = 'icons/icon-32.png'
+    }
+
+    jfxDeploy {
+        vendor    = 'Gerrit Grunwald'
+        packaging = 'image'
+    }
+}
+*/
