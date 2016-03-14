@@ -8,7 +8,7 @@ buildscript {
 }
 
 apply plugin: 'org.javafxports.jfxmobile'
-apply from  : 'http://dl.bintray.com/content/shemnon/javafx-gradle/8.1.1/javafx.plugin' // needed when building native app with gradle build
+//apply from  : 'http://dl.bintray.com/content/shemnon/javafx-gradle/8.1.1/javafx.plugin' // needed when building native app with gradle build
 
 repositories {
     jcenter()
